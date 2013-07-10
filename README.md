@@ -3,7 +3,7 @@ sfsexp
 
 Small Fast S-Expression Library.
 
-NOTE: this code has not yet been migrated from its home for the last 12 years at Sourceforge.net.  Please refer to
+NOTE: this code has not yet been migrated from its home of the last 12 years at Sourceforge.net.  Please refer to
 
 http://sourceforge.net/projects/sexpr/
 
