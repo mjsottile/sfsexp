@@ -1,0 +1,21 @@
+(we should be able to have () arbitrary empty expressions () right?)
+(this file contains a set of test s-expressions to try and break the library)
+(add your own if you want!)
+(")" this should not break read_sexp)
+("\" ) " this should also not break read_sexp.)
+(this one"is supposed to behave like common lisp" would)
+(lets make sure single character a t o m s work fine...)
+(single quote '(tells the parser to ignore what appears in here ")"))
+(thisissupposedtobeareallylongatomtotestthegrowingoftheparservaluebuffersoihopetoputabunchofgibberishherenowoksfhaskdjhflkewrhtlkwehtlksdfjhglskdfjhglsdkfjghlskdfjhgksdjfghlskdjfghlsdfhglsdkfjghgksdfjhglskdfjghlsdkfjghlsdkfjghsldkfjghslkdfjghlskjrhtlkwerjthlwkerjthwlkerjthwlerktjhwelrkjthwelkrjthwelkrtjhwlekrjthwelkrjthwlekrjthwlekjrthwlerkjthlwkerjthwlekrjthwlekrjthlwkerjthwlekrjthwlekrjthwlekrjthwlekrjthwlkerjthwlekrthwiuertyowieruytoweiurtyowierutywoeirutywoeirutywoeirutyoweirutyowiuertyoiweruylgjkhdlsdkjfghsdfng,mdfgnbs,fnmdbgbsbngfsngfnsd,fmngbsbfngbnmsfdbgs,bfmnfngnb,dfg hopefully that worked)
+(lets see if this ; this comment should be ignored 
+; and so should this one, and their parens shouldn't mess things up 
+is ok)
+"another valid atom"
+'(yet another valid atom "to parse")
+"'\"''\'''\'" ;; this one has lots of funky quotes - make sure all is ok
+(#blah)
+(Single 'quoted 'atom 'test)
+('"hmm")
+()
+()
+;; below this line are all expressions that are known to break the parser

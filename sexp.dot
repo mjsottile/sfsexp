@@ -1,0 +1,79 @@
+digraph G {
+state1
+state2
+state3
+state4
+state5
+state6
+state7
+state8
+state9
+state10
+state11
+state12
+state13
+state14
+state15
+
+state1 -> state1 [label="\\n"]
+state1 -> state1 [label="\' \'"]
+state1 -> state1 [label="\\t"]
+state1 -> state1 [label="\\r"]
+
+state1 -> state11 [label=";"]
+state1 -> state2 [label="("]
+state1 -> state3 [label=")"]
+
+state1 -> state5 [label="\""]
+state1 -> state7 [label="\'"]
+state1 -> state12 [label="# and INLINE_BINARY"]
+state1 -> state4 [label="otherwise and NORMAL"]
+
+state2 -> state1
+
+state3 -> state1
+
+state4 -> state1 [label="\\n"]
+state4 -> state1 [label="\' \'"]
+state4 -> state1 [label="\\t"]
+state4 -> state1 [label="\\r"]
+
+state4 -> state3 [label=")"]
+state4 -> state1
+state4 -> state4 [label="valid atom chars"]
+
+state5 -> state6 [label="\""]
+state5 -> state5
+
+state6 -> state1
+
+state7 -> state5 [label="\""]
+state7 -> state8 [label="("]
+state7 -> state4
+
+state8 -> state9 [label=")"]
+state8 -> state8 [label="("]
+state8 -> state10 [label="\""]
+
+state9 -> state1 [label="qdepth==0"]
+state9 -> state8 [label="qdepth>0"]
+
+state10 -> state8 [label="\" and esc==0"]
+state10 -> state10 [label="otherwise"]
+
+state11 -> state1 [label="\\n"]
+state11 -> state11 [label="otherwise"]
+
+state12 -> state13 [label="b"]
+state12 -> state4 [label="otherwise"]
+
+state13 -> state14 [label="#"]
+state13 -> state4 [label="otherwise"]
+
+state14 -> state15 [label="#"]
+state14 -> state14 [label="otherwise"]
+
+state15 -> state15 [label="binread < binlength"]
+state15 -> state1 [label="binread == binlength"]
+
+}

@@ -1,0 +1,14 @@
+*******
+NOTICE: 10-1-2004 ::: This directory should be considered dead code now.
+                      IGNORE IT.
+*******
+
+
+This directory contains bindings for SILOON, allowing testing of the library
+from Python or Perl instead of through the existing C interface alone.
+
+SILOON can be found at http://www.acl.lanl.gov/siloon/
+
+This is NOT intended for real use, and the author (Matt) won't even respond
+to support questions.  It was an experiment, and still is.  (And hasn't been
+looked at in months.)

@@ -1,0 +1,8 @@
+;
+; example input for sexpvis sample code
+;
+(
+  (this (is a nested) list)
+  (and this "has a dquote" in it)
+  '(squote here)
+)

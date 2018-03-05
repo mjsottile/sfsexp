@@ -1,0 +1,6 @@
+(setq a (point 1 2))
+(setq b (point 5 7))
+(setq k1 (circle a b))
+(setq k2 (circle b a))
+(setq tmp (section k1 k2))
+(draw a b (segment (point1 tmp) (point2 tmp)))

@@ -1,0 +1,17 @@
+
+pysexp.c,453
+#define DPRINTF(DPRINTF8,88
+#define DPRINTF(DPRINTF10,137
+struct sexp_parser_state_t *state;13,172
+struct sexp_t *out;14,207
+static PyObject *iter_val(19,302
+#define Py_OneRef(Py_OneRef32,646
+static PyObject *iter_real_list(34,682
+static PyObject *iter_list(76,1359
+static PyObject *iter(127,2175
+static char parse__doc__[141,2347
+static PyObject *pysexp_parse(144,2466
+static PyMethodDef PySexpMethods[170,2910
+void initpysexp(175,3024
+
+test.py,0

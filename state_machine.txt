@@ -1,0 +1,71 @@
+state_machine.txt
+
+Basic description of the state machine used by the parser.  This
+parser is based on a very simple DFA, much like yacc/lex generated
+parsers.  
+
+Shorthand notes: 
+    WS stands for whitespace characters ' ', \t, \r and \n.
+
+---------
+
+Start state = 1
+
+1. STARTING STATE
+
+  t[0] = WS   : t++; state=1
+       = ';'  : t++; state = 11
+       = '('  : t++; state = 2
+       = ')'  : state = 3
+       = '\"' : vcur = val; t++; state = 5
+       = '\'' : t++; state = 7
+       = else : process character as atom head (Note 1); t++; state = 4
+
+2. BEGIN NESTED EXPRESSION
+
+  allocate new sexp_t element, type LIST
+  if (stack empty)
+    create new stack level, new sexp_t added to level (lst=fst=sx), pushed
+  else
+    get top of stack, attach sx to end of chain
+  allocate new stack level, null out contents
+  push empty level
+  state = 1
+
+3. CLOSE NESTED EXPRESSION
+
+  pop the stack (old top = lvl)
+  save head of chain on lvl
+  free stack level
+  if (stack top nonnull)
+    attach head saved from popped level to 'list' pointer from current
+      top chain end.
+  else
+    error
+  state = 1
+
+4. PARSE ATOM
+
+
+5.
+  if escape on, save char, move pointer (unset escape)
+  
+
+6.
+  unquoted, enter state 1
+
+7.
+
+8.
+
+9.
+
+10.
+
+11.
+
+------
+
+Note 1: Duplicated code from state 4 into state 1 to prevent 2 iterations
+        of main loop on first character of each atom.
+
