@@ -1,10 +1,9 @@
 sfsexp
 ======
 
-Small Fast S-Expression Library.
+This library is intended for developers who wish to manipulate (read, parse, modify, and create) symbolic expressions from C or C++ programs. A symbolic expression, or s-expression, is essentially a LISP-like expression such as (a (b c)). S-expressions are able to represent complex, structured data without requiring additional meta-data describing the structure. They are recursively defined: an s-expression is a list of either atoms or s-expressions. In the example above, the expression contains an atom "a" and an s-expression, which in turn contains two atoms, "b" and "c". They are simple, useful, and well understood.
 
-NOTE: this code has not yet been migrated from its home of the last 12 years at Sourceforge.net.  Please refer to
+This library is designed to provide a minimal set of functions and data structures for the four functions listed above: reading s-expressions (I/O), parsing strings containing them into an AST equivalent, modifying the AST representation, and converting the AST back into a well formatted string. The primary goals are efficiency and simplicity. This library forms the basis of the data representation and transmission protocol for the supermon high-speed cluster monitoring system from the LANL ACL. The usefulness and lack of choice in available, open source s-expression libraries motivated the independent (from supermon) release of this library. Although the number of potential users represents a rather small community, the author felt it was a valuable contribution. As of March 2005, this library has actually received more interest in terms of downloads and page views than it's parent project!
 
-http://sourceforge.net/projects/sexpr/
+This work was funded by the Department of Energy, Office of Science. The original development was performed at the Los Alamos National Laboratory between 2002 and 2007. It is currently maintained independently of any funding source as a service to the community (plus, it's fun to work on).
 
-for the current home of the project.  The code will migrate soon, along with some long-planned improvements and tweaks.
