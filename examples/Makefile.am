@@ -4,7 +4,7 @@ LDFLAGS =
 
 noinst_PROGRAMS = binmode callbacks continuations packunpack paultest rcfile sexpvis simple_interp
 include_HEADERS = ../src/sexp.h
-LDADD = ../src/libsexp.a
+LDADD = ../src/libsexp.la
 binmode_SOURCES = binmode.c ../src/sexp.h
 callbacks_SOURCES = callbacks.c ../src/sexp.h
 continuations_SOURCES = continuations.c ../src/sexp.h

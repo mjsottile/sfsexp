@@ -7,6 +7,10 @@ AM_INIT_AUTOMAKE(foreign)
 AC_OUTPUT([Makefile src/Makefile examples/Makefile tests/Makefile])
 AC_CONFIG_SRCDIR([examples/binmode.c])
 AC_CONFIG_HEADER([config.h])
+AC_CONFIG_MACRO_DIRS([m4])
+
+# use libtool
+LT_INIT
 
 ## FROM: http://lists.gnu.org/archive/html/automake/2008-09/msg00075.html
 SX_CPPFLAGS="$CPPFLAGS -DNODEBUG"
@@ -24,7 +28,6 @@ AC_SUBST([SFSEXP_CFLAGS], $SX_CFLAGS)
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
-AC_PROG_RANLIB
 
 # Checks for libraries.
 
