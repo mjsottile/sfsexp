@@ -3,7 +3,7 @@ CPPFLAGS = -I../src $(SFSEXP_CPPFLAGS)
 LDFLAGS =
 
 noinst_PROGRAMS = ctest ctorture error_codes partial read_and_dump readtests
-LDADD = ../src/libsexp.a
+LDADD = ../src/libsexp.la
 ctest_SOURCES = ctest.c ../src/sexp.h
 ctorture_SOURCES = ctorture.c ../src/sexp.h
 error_codes_SOURCES = error_codes.c ../src/sexp.h
