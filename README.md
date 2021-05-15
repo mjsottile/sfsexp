@@ -9,14 +9,15 @@ This work was funded by the Department of Energy, Office of Science. The origina
 
 ## Usage notes
 
-The API is well-documented in the header files, esp. `sexp.h` and
-`sexp.ops`. The library includes a basic (optional) string library as
-well; see `cstring.h`.
+The API is well-documented in the header files, esp.
+[sexp.h](src/sexp.h) and [sexp_ops.h](src/sexp_ops.h). The library
+includes a basic (optional) string library as well; see
+[cstring.h](src/cstring.h).
 
 If you are parsing a set of smallish sexps, as you might have in a
 lispy source file, you probably want to use `init_iowrap` and
-`read_one_sexp`. The `examples` and `tests` contain multiple examples
-showing how to do this.
+`read_one_sexp`. The [examples](examples) and [tests](tests)
+directories contain multiple examples showing how to do this.
 
 The drawback with `read_one_sexp` is that it uses a read buffer of
 size `BUFSIZ`, which may relatively small (1024 on MacOS Big Sur). If
