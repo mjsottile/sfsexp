@@ -10,8 +10,13 @@ This work was funded by the Department of Energy, Office of Science. The origina
 ## Usage notes
 
 The API is well-documented in the header files, esp.
-[sexp.h](src/sexp.h) and [sexp_ops.h](src/sexp_ops.h). The library
-includes a basic (optional) string library as well; see
+[sexp.h](src/sexp.h) and [sexp_ops.h](src/sexp_ops.h). The latter
+contains some convenience operators that may make your life slightly
+easier; for example, it defines `hd_sexp`, `tl_sexp`, and `next_sexp`,
+which make it a little easier to navigate sexps. (see below for a
+schematic representation of sexp structure).
+
+The library includes a basic (optional) string library as well; see
 [cstring.h](src/cstring.h).
 
 If you are parsing a set of smallish sexps, as you might have in a
