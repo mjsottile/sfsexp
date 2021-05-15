@@ -26,7 +26,7 @@ you will get error `SEXP_ERR_INCOMPLETE`, meaning "parsing is
 incomplete and needs more data to complete it."
 ([sexp_errors.h](src/sexp_errors.h)). This can easily happen if you
 are reading data encoded as sexps. For example, it's not uncommon for
-a big hunk o' data to be encoded a a single sexp in a file. One way to
+a big hunk o' data to be encoded as a single sexp in a file. One way to
 handle this situation is to get the file size, dynamically allocate a
 buffer big enought to hold it, and then use `parse_sexp`. Here's a
 minimal example (error checking omitted):
