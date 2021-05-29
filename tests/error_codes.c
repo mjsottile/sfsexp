@@ -56,6 +56,7 @@ int main(int argc, char **argv) {
   char buf[128];
   CSTRING *s = NULL;
   int len;
+  char tinybuf[5];
 
   sprintf(buf,"(I am a (test))");
 
@@ -77,6 +78,16 @@ int main(int argc, char **argv) {
 
   if (pc->error != SEXP_ERR_OK) {
     printf("cparse returned unexpected error.\n");
+    exit(EXIT_FAILURE);
+  }
+
+  len = print_sexp(tinybuf, 5, pc->last_sexp);
+  if (len == -1) {
+    printf("print_sexp reacted correctly to buffer with insufficient space.\nerr=%d\n",
+           sexp_errno);
+    sexp_errno = SEXP_ERR_OK;
+  } else {
+    printf("print_sexp did not fail correctly with insufficient buffer.\n");
     exit(EXIT_FAILURE);
   }
 

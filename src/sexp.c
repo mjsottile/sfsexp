@@ -61,9 +61,9 @@ destroy_sexp (sexp_t * s)
 
   if (s->ty == SEXP_LIST) {
     destroy_sexp (s->list);
-  } else if (s->ty == SEXP_VALUE) {    
+  } else if (s->ty == SEXP_VALUE) {
     if (s->aty == SEXP_BINARY && s->bindata != NULL) {
-      sexp_free(s->bindata, s->binlength);     
+      sexp_free(s->bindata, s->binlength);
     } else if (s->val != NULL) {
       sexp_free(s->val, s->val_allocated);
     }
@@ -81,7 +81,9 @@ destroy_sexp (sexp_t * s)
 
 /**
  * Iterative method to walk sx and turn it back into the string
- * representation of the s-expression.  Fills the buffer.
+ * representation of the s-expression.  Fills the buffer if there
+ * is space.  If there is not, the buffer will be partially filled
+ * up to but not exceeding the buffer size.
  */
 int
 print_sexp (char *buf, size_t size, const sexp_t * sx)
@@ -97,30 +99,61 @@ print_sexp (char *buf, size_t size, const sexp_t * sx)
   sexp_t *fakehead;
   sexp_t tmp;
 
-  if (sx == NULL) {
-	buf[0] = '\0';
-	return 0;
+  /* if no space left, then cleanup, set the error
+     flag, null terminate b, and return -1. */
+#define out_of_space() { \
+      sexp_errno = SEXP_ERR_BUFFER_FULL;   \
+      b--;                                 \
+      b[0] = 0;                            \
+      retval = -1;                         \
+      destroy_stack(stack);                \
+      sexp_t_deallocate(fakehead);         \
+      return retval;                       \
   }
+
+  /* macro for adding one char to b. */
+#define add_char_break_full(c) {           \
+  b[0] = c;                                \
+  b++;                                     \
+  left--;                                  \
+  if (left == 0)                           \
+    {                                      \
+      out_of_space();                      \
+    }                                      \
+}
+
+  if (sx == NULL)
+    {
+      buf[0] = '\0';
+      return 0;
+    }
+
+  if (size < 1)
+    {
+      return -1;
+    }
 
   tmp = *sx;
   tmp.next = tmp.list = NULL;
 
   fakehead = copy_sexp(&tmp);
 
-  if (fakehead == NULL) {
-    sexp_errno = SEXP_ERR_MEMORY;
-    return -1;
-  }
+  if (fakehead == NULL)
+    {
+      sexp_errno = SEXP_ERR_MEMORY;
+      return -1;
+    }
 
   fakehead->list = sx->list;
   fakehead->next = NULL; /* this is the important part of fakehead */
 
   stack = make_stack ();
-  if (stack == NULL) {
-    sexp_errno = SEXP_ERR_MEMORY;
-    sexp_t_deallocate(fakehead);
-    return -1;
-  }
+  if (stack == NULL)
+    {
+      sexp_errno = SEXP_ERR_MEMORY;
+      sexp_t_deallocate(fakehead);
+      return -1;
+    }
 
   push (stack, fakehead);
 
@@ -130,56 +163,38 @@ print_sexp (char *buf, size_t size, const sexp_t * sx)
       tdata = (sexp_t *) top->data;
 
       if (tdata == NULL)
-	{
-	  pop (stack);
+        {
+          pop (stack);
 
-	  if (depth > 0)
-	    {
-	      b[0] = ')';
-	      b++;
-	      left--;
-	      depth--;
-	      if (left == 0)
-		{
-		  sexp_errno = SEXP_ERR_BUFFER_FULL;
-		  break;
-		}
-	    }
+          if (depth > 0)
+            {
+              depth--;
+              add_char_break_full(')');
+            }
 
-	  if (stack->top == NULL)
-	    break;
+          if (stack->top == NULL)
+            break;
 
-	  top = stack->top;
-	  top->data = ((sexp_t *) top->data)->next;
-	  if (top->data != NULL)
-	    {
-	      b[0] = ' ';
-	      b++;
-	      left--;
-	      if (left == 0)
-		{
-		  sexp_errno = SEXP_ERR_BUFFER_FULL;
-		  break;
-		}
-	    }
-	}
+          top = stack->top;
+          top->data = ((sexp_t *) top->data)->next;
+          if (top->data != NULL)
+            {
+              add_char_break_full(' ');
+            }
+        }
       else if (tdata->ty == SEXP_VALUE)
-	{
-	  if (tdata->aty == SEXP_DQUOTE)
-	    {
-	      b[0] = '\"';
-	      b++;
-	      left--;
-	    }
-	  else if (tdata->aty == SEXP_SQUOTE)
-	    {
-	      b[0] = '\'';
-	      b++;
-	      left--;
-	    }
+        {
+          if (tdata->aty == SEXP_DQUOTE)
+            {
+              add_char_break_full('\"');
+            }
+          else if (tdata->aty == SEXP_SQUOTE)
+            {
+              add_char_break_full('\'');
+            }
 
           if (tdata->aty != SEXP_BINARY && tdata->val_used > 0) {
-	    tc = tdata->val;
+            tc = tdata->val;
             /* copy value into string */
             while (tc[0] != 0 && left > 0)
               {
@@ -187,127 +202,98 @@ print_sexp (char *buf, size_t size, const sexp_t * sx)
                 if ((tc[0] == '\"' || tc[0] == '\\') &&
                     tdata->aty == SEXP_DQUOTE)
                   {
-                    b[0] = '\\';
-                    b++;
-                    left--;
-                    if (left == 0) break;
+                    add_char_break_full('\\');
                   }
-                
-                b[0] = tc[0];
-                b++;
+
+                add_char_break_full(tc[0]);
                 tc++;
-                left--;
-                if (left == 0)
-                  break;
               }
           } else {
             if (left > 3) {
-              b[0] = '#'; b[1] = 'b'; b[2] = '#';
-              b+=3;
-              left-=3;
+              add_char_break_full('#');
+              add_char_break_full('b');
+              add_char_break_full('#');
 
 #ifndef WIN32
               if ((size_t)(sz = snprintf(b,left,"%lu#",(unsigned long)tdata->binlength)) >= left) {
 #else
               if ((sz = _snprintf(b,left,"%lu#",tdata->binlength)) >= left) {
 #endif
-                left = 0;
-                break;
+                out_of_space();
               }
+              if (sz < 0) {
+                out_of_space();
+              }
+              
               b += sz;
               left -= sz;
-              
+
               if (left < tdata->binlength) {
-                left = 0;
-                break;
+                out_of_space();
               }
 
-	      if (tdata->binlength > 0) {
-		memcpy(b,tdata->bindata,tdata->binlength);
-		left -= tdata->binlength;
-		b+=tdata->binlength;
-	      }
+              if (tdata->binlength > 0) {
+                memcpy(b,tdata->bindata,tdata->binlength);
+                left -= tdata->binlength;
+                b+=tdata->binlength;
+              }
 
-              b[0] = ' ';
-              left--;
-
+              add_char_break_full(' ');
             } else {
-              left = 0; 
-              break;
+              out_of_space();
             }
           }
 
-	  if (tdata->aty == SEXP_DQUOTE && left > 0)
-	    {
-	      b[0] = '\"';
-	      b++;
-	      left--;
-	    }
+          if (tdata->aty == SEXP_DQUOTE && left > 0)
+            {
+              add_char_break_full('\"');
+            }
 
-	  if (left == 0)
-	    {
-	      sexp_errno = SEXP_ERR_BUFFER_FULL;
-	      break;
-	    }
+          if (left == 0)
+            {
+              out_of_space();
+            }
 
-	  top->data = ((sexp_t *) top->data)->next;
+          top->data = ((sexp_t *) top->data)->next;
 
-	  if (top->data != NULL)
-	    {
-	      b[0] = ' ';
-	      b++;
-	      left--;
-	      if (left == 0)
-		{
-		  sexp_errno = SEXP_ERR_BUFFER_FULL;
-		  break;
-		}
-	    }
-	}
+          if (top->data != NULL)
+            {
+              add_char_break_full(' ');
+            }
+        }
       else if (tdata->ty == SEXP_LIST)
-	{
-	  depth++;
-	  b[0] = '(';
-	  b++;
-	  left--;
-	  if (left == 0)
-	    {
-	      sexp_errno = SEXP_ERR_BUFFER_FULL;
-	      break;
-	    }
+        {
+          depth++;
+          add_char_break_full('(');
 
-	  push (stack, tdata->list);
-	}
+          push (stack, tdata->list);
+        }
       else
-	{
-	  sexp_errno = SEXP_ERR_BADCONTENT;
-	  destroy_stack (stack);
-	  sexp_t_deallocate(fakehead);
-	  return -1;
-	}
+        {
+          sexp_errno = SEXP_ERR_BADCONTENT;
+          destroy_stack (stack);
+          sexp_t_deallocate(fakehead);
+          return -1;
+        }
 
     }
   while (depth != 0)
     {
-      b[0] = ')';
-      b++;
-      left--;
+      add_char_break_full(')');
       depth--;
-      if (left == 0)
-	{
-	  sexp_errno = SEXP_ERR_BUFFER_FULL;
-	  break;
-	}
     }
 
-  if (left != 0) {
-    b[0] = 0;
-    retval = (int) (size-left);
-  } else {
-    b--;
-    b[0] = 0;
-    retval = -1;
-  }
+  if (left != 0)
+    {
+      b[0] = 0;
+      retval = (int) (size-left);
+    }
+  else
+    {
+      b--;
+      b[0] = 0;
+      retval = -1;
+    }
 
   destroy_stack (stack);
   sexp_t_deallocate(fakehead);
@@ -339,9 +325,10 @@ print_sexp_cstr (CSTRING **s, const sexp_t *sx, size_t ss)
   unsigned int i;
   sexp_t tmp;
 
-  if (sx == NULL) {
-    return -1;
-  }
+  if (sx == NULL)
+    {
+      return -1;
+    }
 
   if (*s == NULL)
     _s = snew(ss);
@@ -376,37 +363,37 @@ print_sexp_cstr (CSTRING **s, const sexp_t *sx, size_t ss)
       tdata = (sexp_t *) top->data;
 
       if (tdata == NULL)
-	{
-	  pop (stack);
+        {
+          pop (stack);
 
-	  if (depth > 0)
-	    {
-	      _s = saddch(_s, ')');
-	      depth--;
-	    }
+          if (depth > 0)
+            {
+              _s = saddch(_s, ')');
+              depth--;
+            }
 
-	  if (stack->top == NULL)
-	    break;
+          if (stack->top == NULL)
+            break;
 
-	  top = stack->top;
-	  top->data = ((sexp_t *) top->data)->next;
-	  if (top->data != NULL)
-	    {
-	      _s = saddch(_s, ' ');
-	    }
-	}
+          top = stack->top;
+          top->data = ((sexp_t *) top->data)->next;
+          if (top->data != NULL)
+            {
+              _s = saddch(_s, ' ');
+            }
+        }
       else if (tdata->ty == SEXP_VALUE)
-	{
-	  if (tdata->aty == SEXP_DQUOTE)
-	    {
-	      _s = saddch(_s,'\"');
-	    }
-	  else if (tdata->aty == SEXP_SQUOTE)
-	    {
-	      _s = saddch(_s,'\'');
-	    }
+        {
+          if (tdata->aty == SEXP_DQUOTE)
+            {
+              _s = saddch(_s,'\"');
+            }
+          else if (tdata->aty == SEXP_SQUOTE)
+            {
+              _s = saddch(_s,'\'');
+            }
 
-          if (tdata->aty == SEXP_BINARY) {	    
+          if (tdata->aty == SEXP_BINARY) {
             sprintf(sbuf,"#b#%lu#",(unsigned long)tdata->binlength);
 
             _s = sadd(_s,sbuf);
@@ -415,50 +402,50 @@ print_sexp_cstr (CSTRING **s, const sexp_t *sx, size_t ss)
               _s = saddch(_s,tdata->bindata[i]);
             _s = saddch(_s,' ');
           } else {
-	    if (tdata->val_used > 0) {
-	      tc = tdata->val;
-	      
-	      /* copy value into string */
-	      while (tc[0] != 0)
-		{
-		  /* escape characters that need escaping. */
-		  if ((tc[0] == '\"' ||
-		       tc[0] == '\\') && tdata->aty == SEXP_DQUOTE)
-		    {
-		      _s = saddch(_s,'\\');
-		    }
-		  
-		  _s = saddch(_s,tc[0]);
-		  tc++;
-		}
-	    }
+            if (tdata->val_used > 0) {
+              tc = tdata->val;
+
+              /* copy value into string */
+              while (tc[0] != 0)
+                {
+                  /* escape characters that need escaping. */
+                  if ((tc[0] == '\"' ||
+                       tc[0] == '\\') && tdata->aty == SEXP_DQUOTE)
+                    {
+                      _s = saddch(_s,'\\');
+                    }
+
+                  _s = saddch(_s,tc[0]);
+                  tc++;
+                }
+            }
           }
 
-	  if (tdata->aty == SEXP_DQUOTE)
-	    {
-	      _s = saddch(_s,'\"');
-	    }
+          if (tdata->aty == SEXP_DQUOTE)
+            {
+              _s = saddch(_s,'\"');
+            }
 
-	  top->data = ((sexp_t *) top->data)->next;
+          top->data = ((sexp_t *) top->data)->next;
 
-	  if (top->data != NULL)
-	    {
-	      _s = saddch(_s,' ');
-	    }
-	}
+          if (top->data != NULL)
+            {
+              _s = saddch(_s,' ');
+            }
+        }
       else if (tdata->ty == SEXP_LIST)
-	{
-	  depth++;
-	  _s = saddch(_s,'(');
-	  push (stack, tdata->list);
-	}
+        {
+          depth++;
+          _s = saddch(_s,'(');
+          push (stack, tdata->list);
+        }
       else
-	{
-	  sexp_errno = SEXP_ERR_BADCONTENT;
-	  destroy_stack (stack);
-	  sexp_t_deallocate(fakehead);
-	  return -1;
-	}
+        {
+          sexp_errno = SEXP_ERR_BADCONTENT;
+          destroy_stack (stack);
+          sexp_t_deallocate(fakehead);
+          return -1;
+        }
 
     }
   while (depth != 0)
@@ -524,7 +511,7 @@ sexp_t *new_sexp_binary_atom(char *data, size_t binlength) {
 }
 
 /**
- * allocate a new sexp_t element representing a value 
+ * allocate a new sexp_t element representing a value
  */
 sexp_t *new_sexp_atom(const char *buf, size_t bs, atom_t aty) {
   sexp_t *sx = NULL;
