@@ -1,6 +1,7 @@
 CFLAGS = $(SFSEXP_CFLAGS)
 CPPFLAGS = -I../src $(SFSEXP_CPPFLAGS)
 LDFLAGS =
+EXTRA_DIST = testrc vis.in sexps.in edgelist.dat conttest
 
 noinst_PROGRAMS = binmode callbacks continuations packunpack paultest rcfile sexpvis simple_interp
 include_HEADERS = ../src/sexp.h

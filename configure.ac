@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT(sexpr, 1.3, mjsottile@me.com)
+AC_INIT(sexpr, 1.3.1, mjsottile@me.com)
 AM_INIT_AUTOMAKE(foreign)
 AC_OUTPUT([Makefile src/Makefile examples/Makefile tests/Makefile])
 AC_CONFIG_SRCDIR([examples/binmode.c])

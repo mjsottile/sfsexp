@@ -1,6 +1,7 @@
 CFLAGS = $(SFSEXP_CFLAGS)
 CPPFLAGS = -I../src $(SFSEXP_CPPFLAGS)
 LDFLAGS =
+EXTRA_DIST = test_expressions dotests.sh randsexp.pl
 
 noinst_PROGRAMS = bug ctest ctorture error_codes partial read_and_dump readtests
 LDADD = ../src/libsexp.la
