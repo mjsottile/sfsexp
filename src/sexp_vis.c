@@ -37,7 +37,7 @@ LA-CC-04-094
 #include "faststack.h"
 #include "sexp.h"
 
-void _sexp_to_dotfile(const sexp_t *sx, FILE *fp) {
+static void _sexp_to_dotfile(const sexp_t *sx, FILE *fp) {
   const sexp_t *tmp;
 
   tmp = sx;
