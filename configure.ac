@@ -6,6 +6,7 @@ AC_INIT(sexpr, 1.3.1, mjsottile@me.com)
 AM_INIT_AUTOMAKE(foreign)
 AC_OUTPUT([Makefile src/Makefile examples/Makefile tests/Makefile])
 AC_CONFIG_SRCDIR([examples/binmode.c])
+AC_CONFIG_FILES([sfsexp.pc])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_MACRO_DIRS([m4])
 
