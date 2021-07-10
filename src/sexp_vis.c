@@ -74,12 +74,12 @@ static void _sexp_to_dotfile(const sexp_t *sx, FILE *fp) {
                 (unsigned long)tmp,
                 (unsigned long)tmp->list);
 	_sexp_to_dotfile(tmp->list,fp);
-	if (tmp->next != NULL)
-	  fprintf(fp,"  sx%lu:next -> sx%lu:type;\n",
-                  (unsigned long)tmp,
-                  (unsigned long)tmp->next);
-	tmp = tmp->next;
       }
+      if (tmp->next != NULL)
+        fprintf(fp,"  sx%lu:next -> sx%lu:type;\n",
+                (unsigned long)tmp,
+                (unsigned long)tmp->next);
+      tmp = tmp->next;
     } else {
       if (tmp->aty == SEXP_BINARY)
 	fprintf(fp,"| binlength=%lu | <next> next\"];\n",

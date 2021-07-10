@@ -79,3 +79,16 @@ quoting, and other possible things are interpreted by the parser correctly.
 Users are strongly encouraged to submit expressions that break the parser so
 that the bugs can be fixed and the rogue strings can be added to the
 test_expressions file to ensure that they don't break the parser in the future.
+
+To use vis_test.c :
+-------------------
+
+Add any desired s-expressions to the file 'test_expressions'. Run
+vis_test; if all s-expressions are sucessfully transformed to DOT, it
+will exit 0. DOT output can be examined in out${n}.dot where is the
+index (from 0) of the s-expression in 'test_expressions'. The optional
+first argument defines a number of seconds to allow the program to run
+before interrupting. Pass "0" to disable the watchdog timer (i.e. do
+not interrupt).
+
+
