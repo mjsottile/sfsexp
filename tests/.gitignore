@@ -4,3 +4,5 @@ error_codes
 partial
 read_and_dump
 readtests
+vis_test
+out*.dot

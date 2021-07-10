@@ -3,7 +3,7 @@ CPPFLAGS = -I../src $(SFSEXP_CPPFLAGS)
 LDFLAGS =
 EXTRA_DIST = test_expressions dotests.sh randsexp.pl
 
-noinst_PROGRAMS = bug ctest ctorture error_codes partial read_and_dump readtests
+noinst_PROGRAMS = bug ctest ctorture error_codes partial read_and_dump readtests vis_test
 LDADD = ../src/libsexp.la
 bug_SOURCES = bug.c ../src/sexp.h
 ctest_SOURCES = ctest.c ../src/sexp.h
