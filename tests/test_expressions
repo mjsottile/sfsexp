@@ -18,4 +18,7 @@ is ok)
 ('"hmm")
 ()
 ()
+('Բարեւ "աշխարհ")
+(העלא וועלט)
+('∑ᵢxᵢ (= (σ²)))
 ;; below this line are all expressions that are known to break the parser
