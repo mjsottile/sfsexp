@@ -46,21 +46,39 @@ LA-CC-04-094
 #include "sexp.h"
 #include "sexp_vis.h"
 
+/**
+ * default behavior: read file "vis.in", write DOT representation of s-expression structure
+ * as "sexpexample.dot".
+ *
+ * if one argument provided, read filename specified in first argument, write DOT
+ * representation to "sexpexample.dot"
+ *
+ * if two arguments provided, read filename specified in first argument, write DOT
+ * representation to filename specified in second argument.
+ */
 int main(int argc, char **argv) {
   sexp_t *a;
   int fd;
   sexp_iowrap_t *iow;
 
-  fd = open("vis.in",O_RDONLY);
+  if (argc == 1) {
+    fd = open("vis.in",O_RDONLY);
+  } else {
+    fd = open(argv[1],O_RDONLY);
+  }
 
   iow = init_iowrap(fd);
 
   a = read_one_sexp(iow);
 
-  while (a != NULL) {  
-    sexp_to_dotfile(a,"sexpexample.dot");
-    
-    destroy_sexp(a);  
+  while (a != NULL) {
+    if (argc != 3) {
+      sexp_to_dotfile(a,"sexpexample.dot");
+    } else {
+      sexp_to_dotfile(a,argv[2]);
+    }
+
+    destroy_sexp(a);
     a = read_one_sexp(iow);
   }
 
@@ -68,6 +86,6 @@ int main(int argc, char **argv) {
   sexp_cleanup();
   close(fd);
 
-  
+
   exit(EXIT_SUCCESS);
 }
