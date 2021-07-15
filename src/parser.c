@@ -489,7 +489,7 @@ parse_sexp (char *s, size_t len)
   /* did someone hand us a bare atom with no trailing whitespace? */
   if (sexp_errno == SEXP_ERR_INCOMPLETE && pc->lastPos == NULL) {
     /* simulate trailing whitespace to see if that terminates an atom. */
-    pc = cparse_sexp (dummy, len, pc);
+    pc = cparse_sexp (dummy, 2, pc);
     if (pc == NULL) return NULL; /* assume that cparse_sexp set sexp_errno */
   }
 
