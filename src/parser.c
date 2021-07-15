@@ -477,6 +477,7 @@ destroy_continuation (pcont_t * pc)
 sexp_t *
 parse_sexp (char *s, size_t len)
 {
+  char dummy[2] = "\n\0";
   pcont_t *pc = NULL;
   sexp_t *sx = NULL;
 
@@ -484,6 +485,14 @@ parse_sexp (char *s, size_t len)
 
   pc = cparse_sexp (s, len, pc);
   if (pc == NULL)  return NULL; /* assume that cparse_sexp set sexp_errno */
+
+  /* did someone hand us a bare atom with no trailing whitespace? */
+  if (sexp_errno == SEXP_ERR_INCOMPLETE && pc->lastPos == NULL) {
+    /* simulate trailing whitespace to see if that terminates an atom. */
+    pc = cparse_sexp (dummy, len, pc);
+    if (pc == NULL) return NULL; /* assume that cparse_sexp set sexp_errno */
+  }
+
   sx = pc->last_sexp;
 
   destroy_continuation(pc);
