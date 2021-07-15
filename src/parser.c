@@ -52,7 +52,7 @@ static size_t sexp_val_grow_size  = 64;
 sexp_errcode_t set_parser_buffer_params(size_t ss, size_t gs) {
   if (ss > 0)
     sexp_val_start_size = ss;
-  else 
+  else
     return SEXP_ERR_BAD_PARAM;
 
   if (gs > 0)
@@ -81,14 +81,14 @@ parse_data_t;
 faststack_t *pd_cache;
 #endif
 
-/** 
+/**
  * The global <I>sexp_t_cache</I> is a faststack implementing a cache of
- * pre-alloced s-expression element entities.  Odds are a user should never 
- * touch this.  If you do, you're on your own.  This is used internally by 
+ * pre-alloced s-expression element entities.  Odds are a user should never
+ * touch this.  If you do, you're on your own.  This is used internally by
  * the parser and related code to store unused but allocated sexp_t elements.
  * This should be left alone and manipulated only by the sexp_t_allocate and
- * sexp_t_deallocate functions.  Touching the stack is bad.  
- */ 
+ * sexp_t_deallocate functions.  Touching the stack is bad.
+ */
 #ifndef _NO_MEMORY_MANAGEMENT_
 faststack_t *sexp_t_cache;
 #endif
@@ -249,7 +249,7 @@ pd_allocate(void) {
 
   if (pd_cache == NULL) {
     pd_cache = make_stack();
-    
+
     if (pd_cache == NULL) {
       sexp_errno = SEXP_ERR_MEMORY;
       return NULL;
@@ -324,7 +324,7 @@ void print_pcont(pcont_t * pc, char * buf, size_t buflen) {
   stack_lvl_t *lvl;
   parse_data_t *pdata;
   sexp_t *sx;
-  
+
   /* return if either the buffer or continuation are null */
   if (buf == NULL) return;
   if (pc == NULL) return;
@@ -382,13 +382,13 @@ void print_pcont(pcont_t * pc, char * buf, size_t buflen) {
       /* go to next s-expr */
       sx = sx->next;
     }
-    
+
     /* go up to next level in stack */
     lvl = lvl->above;
   }
 
   /* at this point, all that may remain is a partially parsed string
-     that hasn't been turned into a sexpr yet.  attach it to the 
+     that hasn't been turned into a sexpr yet.  attach it to the
      output string. */
   if (pc->val_used < (buflen-loc)-1) {
     strncpy(cur, pc->val, pc->val_used);
@@ -401,7 +401,7 @@ void print_pcont(pcont_t * pc, char * buf, size_t buflen) {
       cur += (buflen-loc)-2;
     }
   }
-  
+
   /* add null terminator */
   cur[0] = '\0';
 }
@@ -421,12 +421,12 @@ destroy_continuation (pcont_t * pc)
 
   if (pc->stack != NULL) {
     lvl = pc->stack->top;
-    
+
     /*
      * note that destroy_stack() does not free the data hanging off of the
-     * stack.  we have to walk down the stack and do that here. 
+     * stack.  we have to walk down the stack and do that here.
      */
-    
+
     while (lvl != NULL) {
       lvl_data = (parse_data_t *)lvl->data;
 
@@ -445,7 +445,7 @@ destroy_continuation (pcont_t * pc)
 
       lvl = lvl->below;
     }
-    
+
     /*
      * stack has no data on it anymore, so we can free it.
      */
@@ -469,7 +469,7 @@ destroy_continuation (pcont_t * pc)
   sexp_free (pc,sizeof(pcont_t));
 }
 
-/* 
+/*
  * wrapper around cparse_sexp.  assumes s contains a single, complete,
  * null terminated s-expression.  partial sexps or strings containing more
  * than one will act up.
@@ -480,7 +480,7 @@ parse_sexp (char *s, size_t len)
   pcont_t *pc = NULL;
   sexp_t *sx = NULL;
 
-  if (len < 1 || s == NULL) return NULL; /* empty string - return */  
+  if (len < 1 || s == NULL) return NULL; /* empty string - return */
 
   pc = cparse_sexp (s, len, pc);
   if (pc == NULL)  return NULL; /* assume that cparse_sexp set sexp_errno */
@@ -492,7 +492,7 @@ parse_sexp (char *s, size_t len)
 }
 
 pcont_t *
-init_continuation(char *str) 
+init_continuation(char *str)
 {
   pcont_t *cc;
   /* new continuation... */
@@ -501,12 +501,12 @@ init_continuation(char *str)
 #else
   cc = sexp_malloc(sizeof(pcont_t));
 #endif
-  
+
   if (cc == NULL) {
     sexp_errno = SEXP_ERR_MEMORY;
     return NULL;
   }
-  
+
   /* allocate atom buffer */
 #ifdef __cplusplus
   cc->val = (char *)sexp_malloc(sizeof(char)*sexp_val_start_size);
@@ -519,7 +519,7 @@ init_continuation(char *str)
     sexp_free(cc,sizeof(pcont_t));
     return NULL;
   }
-  
+
   /* by default we assume a normal parser */
   cc->mode = PARSER_NORMAL;
 
@@ -564,8 +564,8 @@ sexp_t *
 iparse_sexp (char *s, size_t len, pcont_t *cc) {
   pcont_t *pc;
   sexp_t *sx = NULL;
-  
-  /* 
+
+  /*
    * error check.  note that cc must be non-null, as this routine returns
    * a sexp_t .  If cc is null and a new one gets allocated, there is no
    * way to return it.  Thus this call requires cc to be allocated outside
@@ -575,17 +575,17 @@ iparse_sexp (char *s, size_t len, pcont_t *cc) {
     sexp_errno = SEXP_ERR_BAD_PARAM;
     return NULL;
   }
-  
+
   /* call the parser */
   pc = cparse_sexp(s,len,cc);
 
   if (pc == NULL) return NULL; /* assume cparse_sexp set sexp_errno */
-  
+
   if (cc->last_sexp != NULL) {
     sx = cc->last_sexp;
     cc->last_sexp = NULL;
   }
-  
+
   return sx;
 }
 
@@ -608,7 +608,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
   char *t = NULL;
   char *s = NULL;
   register size_t       binexpected = 0;
-  register size_t       binread = 0; 
+  register size_t       binread = 0;
   register parsermode_t mode = PARSER_NORMAL;
   register size_t       val_allocated = 0;
   register unsigned int squoted = 0;
@@ -674,12 +674,12 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 
     return cc;
   }
-  
+
   /* first, if we have a non null continuation passed in, restore state. */
   if (lc != NULL) {
     /* if the parser mode is events only, call the parser that doesn't
        allocate any elements or stack parts */
-    if (lc->mode == PARSER_EVENTS_ONLY) 
+    if (lc->mode == PARSER_EVENTS_ONLY)
       return eparse_sexp(str,len,lc);
 
     cc = lc;
@@ -713,12 +713,12 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
     /* explicitly set mode -- init continuation defaults to PARSER_NORMAL */
     cc->mode = mode;
     val = cc->val;
-    
+
     val_used = cc->val_used;
     val_allocated = cc->val_allocated;
 
     vcur = val;
-    
+
     /* allocate stack */
     stack = cc->stack;
 
@@ -726,7 +726,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
     s = str;
     t = s;
   }
-  
+
   bufEnd = cc->sbuffer+len;
 
   /* guard for loop - see end of loop for info.  Put it out here in the
@@ -749,7 +749,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 	    case '\n':
 	    case ' ':
 	    case '\t':
-	    case '\r':             
+	    case '\r':
 	      t++;
 	      break;
               /* semicolon starts a comment that extends until a \n is
@@ -762,14 +762,14 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 	    case '(':
 	      state = 2;
 	      t++;
-              if (event_handlers != NULL && 
+              if (event_handlers != NULL &&
                   event_handlers->start_sexpr != NULL)
                 event_handlers->start_sexpr();
 	      break;
 	      /* enter state 3 for close paren */
 	    case ')':
 	      state = 3;
-	      break;              
+	      break;
 	      /* begin quoted string - enter state 5 */
 	    case '\"':
 	      state = 5;
@@ -848,7 +848,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 	  sx->ty = SEXP_LIST;
 	  sx->next = NULL;
 	  sx->list = NULL;
-	  
+
 	  if (stack->height < 1)
 	    {
               data = pd_allocate();
@@ -871,7 +871,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 		data->fst = sx;
 	      data->lst = sx;
 	    }
-	  
+
           data = pd_allocate();
 	  if (data == NULL) {
 	    SAVE_CONT_STATE(SEXP_ERR_MEMORY,NULL);
@@ -879,7 +879,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 	  }
 	  data->fst = data->lst = NULL;
 	  push (stack, data);
-	  
+
 	  state = 1;
 	  break;
 	case 3:
@@ -913,7 +913,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 	      return cc;
 	    }
 
-          if (event_handlers != NULL && 
+          if (event_handlers != NULL &&
               event_handlers->end_sexpr != NULL)
             event_handlers->end_sexpr();
 
@@ -952,7 +952,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 	  /* look at an ascii table - these ranges are the non-whitespace, non
 	     paren and quote characters that are legal in atoms */
 	  if (!((t[0] >= '*' && t[0] <= '~') ||
-		((unsigned char)(t[0]) > 127) || 
+		((unsigned char)(t[0]) > 127) ||
 		(t[0] == '!') ||
 		(t[0] >= '#' && t[0] <= '&')))
 	    {
@@ -986,7 +986,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 #else
               val = sexp_malloc(sizeof(char)*sexp_val_start_size);
 #endif
-	      
+
 	      if (val == NULL) {
 		sexp_t_deallocate(sx);
 		SAVE_CONT_STATE(SEXP_ERR_MEMORY, NULL);
@@ -996,7 +996,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
               val_allocated = sexp_val_start_size;
               val_used = 0;
               vcur = val;
-	      
+
 	      if (!empty_stack (stack))
 		{
 		  data = (parse_data_t *) top_data (stack);
@@ -1096,7 +1096,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
               if (squoted == 1) {
                 vcur[0] = '\"';
                 val_used++;
-                
+
                 if (val_used == val_allocated) {
 		  char *valnew = NULL;
 
@@ -1110,7 +1110,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 					val_allocated+sexp_val_grow_size,
 					val_allocated);
 #endif
-		  
+
 		  if (valnew == NULL) {
 		    SAVE_CONT_STATE(SEXP_ERR_MEMORY, NULL);
 		    return cc;
@@ -1155,7 +1155,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 #else
               val = sexp_malloc(sizeof(char)*sexp_val_start_size);
 #endif
-	      
+
 	      if (val == NULL) {
 		sexp_t_deallocate(sx);
 		SAVE_CONT_STATE(SEXP_ERR_MEMORY, NULL);
@@ -1165,7 +1165,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
               val_allocated = sexp_val_start_size;
               val_used = 0;
               vcur = val;
-	      
+
 	      if (!empty_stack (stack))
 		{
 		  data = (parse_data_t *) top_data (stack);
@@ -1222,9 +1222,9 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
                 val_allocated += sexp_val_grow_size;
               } else vcur++;
 
-	      if (t[0] == '\\') { 
-                esc = 1;  
-	      } else 
+	      if (t[0] == '\\') {
+                esc = 1;
+	      } else
                 esc = 0;
 	    }
 
@@ -1243,7 +1243,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 
               vcur[0] = '\"';
               val_used++;
-              
+
               if (val_used == val_allocated) {
 		char *valnew = NULL;
 
@@ -1260,13 +1260,13 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 		  SAVE_CONT_STATE(SEXP_ERR_MEMORY, NULL);
 		  return cc;
 		}
-		
+
 		val = valnew;
 
                 vcur = val + val_used;
                 val_allocated += sexp_val_grow_size;
               } else vcur++;
-              
+
               squoted = 1;
 	    }
 	  else if (t[0] == '(')
@@ -1362,7 +1362,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
               val = sexp_malloc(sizeof(char)*sexp_val_start_size);
 #endif
 
-	      if (val == NULL) { 
+	      if (val == NULL) {
 		sexp_t_deallocate(sx);
 		SAVE_CONT_STATE(SEXP_ERR_MEMORY, NULL);
 		return cc;
@@ -1371,7 +1371,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
               val_allocated = sexp_val_start_size;
               val_used = 0;
               vcur = val;
-	      
+
 	      if (!empty_stack (stack))
 		{
 		  data = (parse_data_t *) top_data (stack);
@@ -1425,7 +1425,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 	    if (valnew == NULL) {
 	      SAVE_CONT_STATE(SEXP_ERR_MEMORY, NULL);
 	      return cc;
-	    } 
+	    }
 
 	    val = valnew;
 
@@ -1447,46 +1447,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
             if (t[0] == '\\') esc = 1;
             else esc = 0;
             val_used++;
-            
-            if (val_used == val_allocated) {
-	      char *valnew = NULL;
 
-#ifdef __cplusplus
-              valnew = (char *)sexp_realloc(val,
-					    val_allocated+sexp_val_grow_size,
-					    val_allocated);
-#else
-              valnew = sexp_realloc(val,
-				    val_allocated+sexp_val_grow_size,
-				    val_allocated);
-#endif
-	      
-	      if (valnew == NULL) {
-		SAVE_CONT_STATE(SEXP_ERR_MEMORY, NULL);
-		return cc;
-	      }
-
-	      val = valnew;
-
-              vcur = val + val_used;
-              val_allocated += sexp_val_grow_size;
-            } else vcur++;         
-            
-            state = 13; /* so far, #b */
-            t++;
-          } else {
-            state = 4; /* not #b, so plain ol' atom */
-          }
-
-          break;
-
-        case 13: /* pre: we saw a #b and we're in inline binary mode */
-          if (t[0] == '#') {
-            vcur[0] = t[0];
-            if (t[0] == '\\') esc = 1;
-            else esc = 0;
-            val_used++;
-            
             if (val_used == val_allocated) {
 	      char *valnew = NULL;
 
@@ -1510,7 +1471,46 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
               vcur = val + val_used;
               val_allocated += sexp_val_grow_size;
             } else vcur++;
-                        
+
+            state = 13; /* so far, #b */
+            t++;
+          } else {
+            state = 4; /* not #b, so plain ol' atom */
+          }
+
+          break;
+
+        case 13: /* pre: we saw a #b and we're in inline binary mode */
+          if (t[0] == '#') {
+            vcur[0] = t[0];
+            if (t[0] == '\\') esc = 1;
+            else esc = 0;
+            val_used++;
+
+            if (val_used == val_allocated) {
+	      char *valnew = NULL;
+
+#ifdef __cplusplus
+              valnew = (char *)sexp_realloc(val,
+					    val_allocated+sexp_val_grow_size,
+					    val_allocated);
+#else
+              valnew = sexp_realloc(val,
+				    val_allocated+sexp_val_grow_size,
+				    val_allocated);
+#endif
+
+	      if (valnew == NULL) {
+		SAVE_CONT_STATE(SEXP_ERR_MEMORY, NULL);
+		return cc;
+	      }
+
+	      val = valnew;
+
+              vcur = val + val_used;
+              val_allocated += sexp_val_grow_size;
+            } else vcur++;
+
             state = 14; /* so far, #b# - we're definitely in binary
                            land now. */
             /* reset vcur to val, overwrite #b# with the size string. */
@@ -1522,7 +1522,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
           }
 
           break;
-          
+
         case 14:
           /**
            * so far we've read #b#.  Now, the steps of the process become:
@@ -1559,7 +1559,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
             if (t[0] == '\\') esc = 1;
             else esc = 0;
             val_used++;
-            
+
             if (val_used == val_allocated) {
 	      char *valnew = NULL;
 
@@ -1572,7 +1572,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 				    val_allocated+sexp_val_grow_size,
 				    val_allocated);
 #endif
-	      
+
 	      if (valnew == NULL) {
 		SAVE_CONT_STATE(SEXP_ERR_MEMORY, NULL);
 		return cc;
@@ -1618,12 +1618,12 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
 
             bindata = NULL;
             binread = binexpected = 0;
-            
+
             state = 1;
 
             val_used = 0;
             vcur = val;
-	      
+
             if (!empty_stack (stack))
               {
                 data = (parse_data_t *) top_data (stack);
@@ -1650,7 +1650,7 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
       /* the null check used to be part of the guard on the while loop.
          unfortunately, if we're in state 15, null is considered a
          perfectly valid byte.  This means the length passed in better
-         be accurate for the parser to not walk off the end of the 
+         be accurate for the parser to not walk off the end of the
          string! */
       if (state != 15 && t[0] == '\0') keepgoing = 0;
     }
@@ -1675,6 +1675,6 @@ cparse_sexp (char *str, size_t len, pcont_t *lc)
     else
       cc->lastPos = t;
   }
-  
+
   return cc;
 }
