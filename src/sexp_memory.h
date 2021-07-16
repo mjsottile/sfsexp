@@ -1,38 +1,38 @@
 /**
-@cond IGNORE
+   @cond IGNORE
 
-======================================================
- SFSEXP: Small, Fast S-Expression Library version 1.2
- Written by Matthew Sottile (mjsottile@gmail.com)
-======================================================
+   ======================================================
+   SFSEXP: Small, Fast S-Expression Library
+   Written by Matthew Sottile (mjsottile@gmail.com)
+   ======================================================
 
-Copyright (2003-2006). The Regents of the University of California. This
-material was produced under U.S. Government contract W-7405-ENG-36 for Los
-Alamos National Laboratory, which is operated by the University of
-California for the U.S. Department of Energy. The U.S. Government has rights
-to use, reproduce, and distribute this software. NEITHER THE GOVERNMENT NOR
-THE UNIVERSITY MAKES ANY WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY
-LIABILITY FOR THE USE OF THIS SOFTWARE. If software is modified to produce
-derivative works, such modified software should be clearly marked, so as not
-to confuse it with the version available from LANL.
+   Copyright (2003-2006). The Regents of the University of California. This
+   material was produced under U.S. Government contract W-7405-ENG-36 for Los
+   Alamos National Laboratory, which is operated by the University of
+   California for the U.S. Department of Energy. The U.S. Government has rights
+   to use, reproduce, and distribute this software. NEITHER THE GOVERNMENT NOR
+   THE UNIVERSITY MAKES ANY WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY
+   LIABILITY FOR THE USE OF THIS SOFTWARE. If software is modified to produce
+   derivative works, such modified software should be clearly marked, so as not
+   to confuse it with the version available from LANL.
 
-Additionally, this library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation; either version 2.1 of the
-License, or (at your option) any later version.
+   Additionally, this library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public License as
+   published by the Free Software Foundation; either version 2.1 of the
+   License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
-for more details.
+   This library is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+   FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+   for more details.
 
-You should have received a copy of the GNU Lesser General Public License
-along with this library; if not, write to the Free Software Foundation,
-Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, U SA
+   You should have received a copy of the GNU Lesser General Public License
+   along with this library; if not, write to the Free Software Foundation,
+   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, U SA
 
-LA-CC-04-094
+   LA-CC-04-094
 
-@endcond
+   @endcond
 **/
 #ifndef __SEXP_MEMORY_H__
 #define __SEXP_MEMORY_H__
@@ -43,7 +43,7 @@ LA-CC-04-094
  * \brief Wrappers around basic memory allocation/deallocation routines to
  *        allow memory usage limiting.  Only enabled if _SEXP_LIMIT_MEMORY_
  *        is defined when building the library, otherwise the routines
- *        are defined to be the standard malloc/calloc/realloc/free 
+ *        are defined to be the standard malloc/calloc/realloc/free
  *        functions.
  */
 
@@ -62,7 +62,7 @@ extern "C" {
    * \ingroup memory
    * Wrapper around malloc, will check and increment memory usage
    * counters if space is available.  Returns NULL if no memory left
-   * to use, otherwise returns whatever malloc returns.  
+   * to use, otherwise returns whatever malloc returns.
    * Due to the fact that NULL could mean either the memory limit was exceeded
    * or the system call returned NULL, the user must check sexp_errno to
    * determine the root cause.
@@ -70,7 +70,7 @@ extern "C" {
   void *sexp_malloc(size_t size);
 
   /**
-   * \ingroup memory 
+   * \ingroup memory
    * Wrapper around calloc, will check and increment memory usage
    * counters if space is available.  Returns NULL if no memory left
    * to use, otherwise returns whatever calloc returns
@@ -92,9 +92,9 @@ extern "C" {
    * \ingroup memory
    * Wrapper around realloc.  Instead of trusting sizeof(ptr) to return the
    * proper value, we explicitly pass the size of memory associated with
-   * ptr as the oldsize.  Increments the memory usage counter by 
-   * (size-oldsize) if enough space available for realloc.  
-   * Returns NULL if no memory left to use, otherwise returns whatever 
+   * ptr as the oldsize.  Increments the memory usage counter by
+   * (size-oldsize) if enough space available for realloc.
+   * Returns NULL if no memory left to use, otherwise returns whatever
    * realloc returns.
    * Due to the fact that NULL could mean either the memory limit was exceeded
    * or the system call returned NULL, the user must check sexp_errno to
@@ -118,7 +118,7 @@ extern "C" {
   /**
    * \ingroup memory
    * Set the memory limit if memory limiting was enabled.  If the new value
-   * is zero or less, -1 is returned and sexp_errno is set.  Similarly, if 
+   * is zero or less, -1 is returned and sexp_errno is set.  Similarly, if
    * the new value is less than the current amount used by the library,
    * -1 is returned and sexp_errno is set.  If the new value is valid, the
    * new value is returned.

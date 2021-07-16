@@ -1,38 +1,38 @@
 /**
-@cond IGNORE
+   @cond IGNORE
 
-======================================================
- SFSEXP: Small, Fast S-Expression Library version 1.2
- Written by Matthew Sottile (mjsottile@gmail.com)
-======================================================
+   ======================================================
+   SFSEXP: Small, Fast S-Expression Library
+   Written by Matthew Sottile (mjsottile@gmail.com)
+   ======================================================
 
-Copyright (2003-2006). The Regents of the University of California. This
-material was produced under U.S. Government contract W-7405-ENG-36 for Los
-Alamos National Laboratory, which is operated by the University of
-California for the U.S. Department of Energy. The U.S. Government has rights
-to use, reproduce, and distribute this software. NEITHER THE GOVERNMENT NOR
-THE UNIVERSITY MAKES ANY WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY
-LIABILITY FOR THE USE OF THIS SOFTWARE. If software is modified to produce
-derivative works, such modified software should be clearly marked, so as not
-to confuse it with the version available from LANL.
+   Copyright (2003-2006). The Regents of the University of California. This
+   material was produced under U.S. Government contract W-7405-ENG-36 for Los
+   Alamos National Laboratory, which is operated by the University of
+   California for the U.S. Department of Energy. The U.S. Government has rights
+   to use, reproduce, and distribute this software. NEITHER THE GOVERNMENT NOR
+   THE UNIVERSITY MAKES ANY WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY
+   LIABILITY FOR THE USE OF THIS SOFTWARE. If software is modified to produce
+   derivative works, such modified software should be clearly marked, so as not
+   to confuse it with the version available from LANL.
 
-Additionally, this library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation; either version 2.1 of the
-License, or (at your option) any later version.
+   Additionally, this library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public License as
+   published by the Free Software Foundation; either version 2.1 of the
+   License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
-for more details.
+   This library is distributed in the hope that it will be useful, but WITHOUT
+   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+   FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+   for more details.
 
-You should have received a copy of the GNU Lesser General Public License
-along with this library; if not, write to the Free Software Foundation,
-Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, U SA
+   You should have received a copy of the GNU Lesser General Public License
+   along with this library; if not, write to the Free Software Foundation,
+   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, U SA
 
-LA-CC-04-094
+   LA-CC-04-094
 
-@endcond
+   @endcond
 **/
 #ifndef __SEXP_H__
 #define __SEXP_H__
@@ -58,7 +58,7 @@ LA-CC-04-094
  * \mainpage A small and quick S-expression parsing library.
  *
  * \section intro Introduction
- * 
+ *
  * This library was created to provide s-expression parsing and manipulation
  * facilities to C and C++ programs.  The primary goals were speed and
  * efficiency - low memory impact, and the highest speed we could achieve in
@@ -87,9 +87,9 @@ LA-CC-04-094
  *
  * \section credits Credits
  *
- * SFSEXP: Small, Fast S-Expression Library version 1.2, October 2007 \n
+ * SFSEXP: Small, Fast S-Expression Library version \n
  * Written by Matthew Sottile (mjsottile@gmail.com)
- * 
+ *
  * \section license License Information
  *
  * Copyright (2003-2006). The Regents of the University of California. This
@@ -101,21 +101,21 @@ LA-CC-04-094
  * LIABILITY FOR THE USE OF THIS SOFTWARE. If software is modified to produce
  * derivative works, such modified software should be clearly marked, so as not
  * to confuse it with the version available from LANL.
- * 
+ *
  * Additionally, this library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
  * for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, U SA
- * 
+ *
  * LA-CC-04-094
  *
  */
@@ -136,7 +136,7 @@ LA-CC-04-094
  * represents an s-expression, and the element contains a pointer to
  * the head element of the associated s-expression.
  */
-typedef enum { 
+typedef enum {
   /**
    * An atom of some type.  See atom type (aty) field of element structure
    * for details as to which atom type this is.
@@ -148,7 +148,7 @@ typedef enum {
    * head of a list.
    */
   SEXP_LIST
-} elt_t; 
+} elt_t;
 
 /**
  * For an element that represents a value, the value can be interpreted
@@ -167,17 +167,17 @@ typedef enum {
  * us stored in the val field with val_used and val_allocated tracking the
  * size of the value string and the total memory allocated for it.
  */
-typedef enum { 
+typedef enum {
   /**
    * Basic, unquoted value.
    */
-  SEXP_BASIC, 
+  SEXP_BASIC,
 
   /**
    * Single quote (tick-mark) value - contains a string representing
    * a non-parsed portion of the s-expression.
    */
-  SEXP_SQUOTE, 
+  SEXP_SQUOTE,
 
   /**
    * Double-quoted string.  Similar to a basic value, but potentially
@@ -222,7 +222,7 @@ typedef enum {
  * the head of the appropriate s-expression.  Details regarding these fields
  * and their values given with the fields themselves.  Notice that a single
  * quote can appear directly before an s-expression or atom, similar to the
- * use in LISP.  
+ * use in LISP.
  */
 typedef struct elt {
   /**
@@ -249,12 +249,12 @@ typedef struct elt {
    * Number of bytes allocated for val.
    */
   size_t   val_allocated;
-  
+
   /**
    * Number of bytes used in val (<= val_allocated).
    */
   size_t   val_used;
-  
+
   /**
    * If the type of the element is <B>SEXP_LIST</B>, this field will contain
    * a pointer to the head element of the list.
@@ -286,11 +286,11 @@ typedef struct elt {
    * elements.  This is only used in INLINE_BINARY parser mode.
    * <B>IMPORTANT NOTE</B>: The data in this field is freed on a
    * destroy_sexp() call, so users should copy it to memory they allocate
-   * if they wish it to persist after the sexp_t has been freed. 
+   * if they wish it to persist after the sexp_t has been freed.
    */
   char *bindata;
 
-  /** 
+  /**
    * The length of the data pointed at by bindata in bytes.
    */
   size_t binlength;
@@ -341,7 +341,7 @@ typedef struct parser_event_handlers {
    * is encountered starting an expression.
    */
   void (* start_sexpr)();
- 
+
   /**
    * The end_sexpr function pointer is called when an close parenthesis
    * is encountered ending an expression.
@@ -373,7 +373,7 @@ typedef struct parser_event_handlers {
  * return all s-expressions at once without knowing how many there are in
  * advance (this would require more memory management than we want...).
  * So, by using a continuation-based parser, we can call it with this string
- * and have it return a continuation when it has parsed the first 
+ * and have it return a continuation when it has parsed the first
  * s-expression.  Once we have processed the s-expression (accessible
  * through the <i>last_sexpr</i> field of the continuation), we can call
  * the parser again with the same string and continuation, and it will be
@@ -478,7 +478,7 @@ typedef struct pcont {
   /**
    * Error code.  Used to indicate that the continuation being returned does
    * not represent a successful parsing and thus the contents aren't of much
-   * value.  
+   * value.
    */
   sexp_errcode_t error;
 
@@ -512,7 +512,7 @@ typedef struct pcont {
    * Number of bytes of the binary blob that have already been read in.
    */
   size_t binread;
-  
+
   /**
    * Pointer to the memory containing the binary data being read in.
    */
@@ -552,7 +552,7 @@ typedef struct sexp_iowrap {
    * Buffer to read data into before parsing.
    */
   char buf[BUFSIZ];
-  
+
   /**
    * Byte count for last read.  If it is -1, there was an error.  Otherwise,
    * it will be a value from 0 to BUFSIZ.
@@ -613,7 +613,7 @@ extern "C" {
    * return an allocated sexp_t.  This structure may be an already allocated
    * one from the stack or a new one if none are available.  Use this instead
    * of manually mallocing if you want to avoid excessive mallocs.  <I>Note:
-   * Mallocing your own expressions is fine - you can even use 
+   * Mallocing your own expressions is fine - you can even use
    * sexp_t_deallocate to deallocate them and put them in the pool.</I>
    * Also, if the stack has not been initialized yet, this does so.
    */
@@ -625,7 +625,7 @@ extern "C" {
    * allocated already.
    */
   void sexp_t_deallocate(sexp_t *s);
-  
+
   /**
    * In the event that someone wants us to release ALL of the memory used
    * between calls by the library, they can free it.  If you don't call
@@ -673,7 +673,7 @@ extern "C" {
    * element is carrying a binary pointer only.
    */
   sexp_t *new_sexp_binary_atom(char *data, size_t binlength);
-  
+
   /**
    * Allocate a new sexp_t element representing a value.  The user must
    * specify the precise type of the atom.  This used to default to
@@ -685,9 +685,9 @@ extern "C" {
    * wanted.
    */
   sexp_t *new_sexp_atom(const char *buf, size_t bs, atom_t aty);
-    
-  /** 
-   * create an initial continuation for parsing the given string 
+
+  /**
+   * create an initial continuation for parsing the given string
    */
   pcont_t *init_continuation(char *str);
 
@@ -714,7 +714,7 @@ extern "C" {
   void destroy_iowrap(sexp_iowrap_t *iow);
 
   /**
-   * \ingroup IO 
+   * \ingroup IO
    * given and IO wrapper handle, read one s-expression
    * off of it.  this expression may be contained in a continuation,
    * so there is no guarantee that under the covers an IO read
@@ -725,27 +725,27 @@ extern "C" {
    * problematic error.
    */
   sexp_t *read_one_sexp(sexp_iowrap_t *iow);
-  
-  /** 
+
+  /**
    * \ingroup parser
-   * wrapper around parser for compatibility. 
+   * wrapper around parser for compatibility.
    */
   sexp_t *parse_sexp(char *s, size_t len);
 
-  /** 
+  /**
    * \ingroup parser
-   * wrapper around parser for friendlier continuation use 
-   * pre-condition : continuation (cc) is NON-NULL! 
+   * wrapper around parser for friendlier continuation use
+   * pre-condition : continuation (cc) is NON-NULL!
    */
   sexp_t *iparse_sexp(char *s, size_t len, pcont_t *cc);
-  
+
   /**
    * \ingroup parser
    * given a LISP style s-expression string, parse it into a set of
-   * connected sexp_t structures. 
+   * connected sexp_t structures.
    */
   pcont_t *cparse_sexp(char *s, size_t len, pcont_t *pc);
-  
+
   /**
    * given a sexp_t structure, free the memory it uses (and recursively free
    * the memory used by all sexp_t structures that it references).  Note
@@ -774,7 +774,7 @@ extern "C" {
    */
   void print_pcont(pcont_t * pc, char * buf, size_t buflen);
 
-/* this is for C++ users */
+  /* this is for C++ users */
 #ifdef __cplusplus
 }
 #endif
@@ -782,4 +782,3 @@ extern "C" {
 #include "sexp_ops.h"
 
 #endif /* __SEXP_H__ */
-
