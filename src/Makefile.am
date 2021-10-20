@@ -1,6 +1,5 @@
 CFLAGS = $(SFSEXP_CFLAGS)
 CPPFLAGS = $(SFSEXP_CPPFLAGS)
-LDFLAGS =
 
 lib_LTLIBRARIES = libsexp.la
 include_HEADERS = sexp.h sexp_vis.h sexp_ops.h sexp_memory.h sexp_errors.h cstring.h faststack.h
