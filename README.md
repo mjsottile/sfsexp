@@ -4,7 +4,7 @@ sfsexp
 This library is intended for developers who wish to manipulate (read,
 parse, modify, and create) symbolic expressions from C or C++
 programs. A symbolic expression, or s-expression, is essentially a
-LISP-like expression such as (a (b c)). S-expressions are able to
+LISP-like expression such as `(a (b c))`. S-expressions are able to
 represent complex, structured data without requiring additional
 meta-data describing the structure. They are recursively defined: an
 s-expression is a list of either atoms or s-expressions. In the
@@ -136,7 +136,7 @@ to handle this situation is to get the file size, dynamically allocate
 a buffer big enought to hold it, and then use `parse_sexp`. Here's a
 minimal example (error checking omitted):
 
-```
+```c
 int fd;
 FILE *fp = fopen(fname, "r");
 fseek(fp, 0, SEEK_END);
