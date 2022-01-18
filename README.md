@@ -72,7 +72,7 @@ consolidated header that encapsulates all of the headers currently
 included in the library.  If you do not want to aim your project that
 uses the library into the library source and build directories
 directly, creating a separate installation prefix and installing there
-is recommended.  For example, from the root of the sexpr tree:
+is recommended.  For example, from the root of the sfsexp tree:
 
 ```
 % mkdir installTree
