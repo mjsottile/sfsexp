@@ -4,7 +4,7 @@ LDFLAGS =
 EXTRA_DIST = testrc vis.in sexps.in edgelist.dat conttest
 
 noinst_PROGRAMS = binmode callbacks continuations packunpack paultest rcfile sexpvis simple_interp
-include_HEADERS = ../src/sexp.h
+noinst_HEADERS = ../src/sexp.h
 LDADD = ../src/libsexp.la
 binmode_SOURCES = binmode.c ../src/sexp.h
 callbacks_SOURCES = callbacks.c ../src/sexp.h
