@@ -17,7 +17,12 @@ data structures for the four functions listed above: reading
 s-expressions (I/O), parsing strings containing them into an AST
 equivalent, modifying the AST representation, and converting the AST
 back into a well formatted string. The primary goals are efficiency
-and simplicity. This library forms the basis of the data
+and simplicity.   Beyond basic s-expression handling, the library
+supports a mode to inline binary data within an expression.  The
+continuation-based parser is designed to efficiently handle
+parsing multiple streams.
+
+This library forms the basis of the data
 representation and transmission protocol for the
 [Supermon](https://dl.acm.org/doi/10.5555/792762.793324) high-speed
 cluster monitoring system from the LANL Advanced Computing
