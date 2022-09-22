@@ -20,7 +20,8 @@ back into a well formatted string. The primary goals are efficiency
 and simplicity.   Beyond basic s-expression handling, the library
 supports a mode to inline binary data within an expression.  The
 continuation-based parser is designed to efficiently handle
-parsing multiple streams.
+parsing multiple streams.  The library is also designed with a
+limited memory mode for use in embedded systems.
 
 This library forms the basis of the data
 representation and transmission protocol for the
