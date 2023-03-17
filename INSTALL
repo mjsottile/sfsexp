@@ -1,3 +1,4 @@
+To build, you'll need: autoconf automake libtool m4.
 
 To try things out, just type:
 

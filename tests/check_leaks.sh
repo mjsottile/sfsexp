@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 function test {
-    valgrind --leak-check=full --show-reachable=yes -q "$@" > /dev/null
+    libtool --mode=execute valgrind --leak-check=full --show-reachable=yes -q "$@" > /dev/null
     status=$?
     if [ $status -ne 0 ]; then
         echo "error with $1"
     else
-	echo "no error with $1"
+        echo "no error with $1"
     fi
     return $status
 }
@@ -14,7 +14,7 @@ function test {
 test ./ctest
 
 ## note: need to keep iteration count for ctorture low here
-## due to performance overhead of valgrind.  
+## due to performance overhead of valgrind.
 perl ./randsexp.pl 200 40000 0.4 > /tmp/SEXP.SKINNY
 test ./ctorture -i 10 -f /tmp/SEXP.SKINNY
 rm -f /tmp/SEXP.SKINNY
