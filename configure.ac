@@ -20,7 +20,11 @@ AC_ARG_ENABLE(debug,
    [AS_HELP_STRING([--enable-debug],[turn on debug options and code (disabled by default)])],
    [SX_CPPFLAGS="" SX_CFLAGS="$CFLAGS -g -O0 -Wall"],
    [])
- 
+
+AC_ARG_ENABLE(thread-unsafe-memory-management,
+   [AS_HELP_STRING([--enable-thread-unsafe-memory-management],[turn on thread-unsafe memory management (disabled by default)])],
+   [],
+   [SX_CFLAGS="$SX_CFLAGS -D_NO_MEMORY_MANAGEMENT_"])
 
 # Export flags
 AC_SUBST([SFSEXP_CPPFLAGS], $SX_CPPFLAGS)
