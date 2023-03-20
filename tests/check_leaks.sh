@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+# if valgrind isn't present we can't proceed - otherwise
+# we get a cascade of command not found failures
+if ! command -v valgrind &> /dev/null
+then
+    echo "cannot continue: valgrind could not be found"
+    exit
+fi
+
 function test {
     libtool --mode=execute valgrind --leak-check=full --show-reachable=yes -q "$@" > /dev/null
     status=$?
