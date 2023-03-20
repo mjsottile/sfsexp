@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ ! -f ./configure ]; then
   echo "Generate configure first.  See INSTALL."
