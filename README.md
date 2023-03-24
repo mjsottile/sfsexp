@@ -50,11 +50,13 @@ Currently, the major features that can be enabled via autoconf are:
 - "--enable-thread-unsafe-memory-management" to enable caching of
   s-expressions in a thread-unsafe way.
 
-Other features are toggled by setting appropriate options in the CFLAGS:
+Other features are toggled by setting appropriate options in the CFLAGS,
+such as the memory-limiting mode.
 
 ```
-% CFLAGS=-D__DISABLE_MEMMAN__ ./configure
+% CFLAGS=-D_SEXP_LIMIT_MEMORY_ ./configure
 ```
+
 Note that you should use the vanilla configuration unless you know that you
 want to use debug mode or other options, and understand precisely what they
 mean.
