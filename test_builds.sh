@@ -9,6 +9,24 @@ if [ -f ./Makefile ]; then
   make distclean
 fi
 
+./configure --enable-thread-unsafe-memory-management
+make
+cd tests
+./check_leaks.sh
+cd ../examples
+./check_leaks.sh
+cd ..
+
+make distclean
+./configure --enable-debug --enable-thread-unsafe-memory-management
+make
+cd tests
+./check_leaks.sh
+cd ../examples
+./check_leaks.sh
+cd ..
+
+make distclean
 ./configure
 make
 cd tests
@@ -19,24 +37,6 @@ cd ..
 
 make distclean
 ./configure --enable-debug
-make
-cd tests
-./check_leaks.sh
-cd ../examples
-./check_leaks.sh
-cd ..
-
-make distclean
-CFLAGS=-D_NO_MEMORY_MANAGEMENT_ ./configure
-make
-cd tests
-./check_leaks.sh
-cd ../examples
-./check_leaks.sh
-cd ..
-
-make distclean
-CFLAGS=-D_NO_MEMORY_MANAGEMENT_ ./configure --enable-debug 
 make
 cd tests
 ./check_leaks.sh

@@ -44,15 +44,19 @@ Configure the sources via autoconf.
 % ./configure
 ```
 
-Currently, the only feature that can be enabled via autoconf is to
-enable any debugging code in the library by specifying
-"--enable-debug".  Other features such as disabling memory management
-by the library are toggled by setting appropriate options in the
-CFLAGS:
+Currently, the major features that can be enabled via autoconf are:
+
+- "--enable-debug" to enable any debugging code in the library,
+- "--enable-thread-unsafe-memory-management" to enable caching of
+  s-expressions in a thread-unsafe way.
+
+Other features are toggled by setting appropriate options in the CFLAGS,
+such as the memory-limiting mode.
 
 ```
-% CFLAGS=-D_NO_MEMORY_MANAGEMENT_ ./configure
+% CFLAGS=-D_SEXP_LIMIT_MEMORY_ ./configure
 ```
+
 Note that you should use the vanilla configuration unless you know that you
 want to use debug mode or other options, and understand precisely what they
 mean.
@@ -139,7 +143,7 @@ incomplete and needs more data to complete it."
 are reading data encoded as sexps. For example, it's not uncommon for
 a big hunk o' data to be encoded as a single sexp in a file. One way
 to handle this situation is to get the file size, dynamically allocate
-a buffer big enought to hold it, and then use `parse_sexp`. Here's a
+a buffer big enough to hold it, and then use `parse_sexp`. Here's a
 minimal example (error checking omitted):
 
 ```c
