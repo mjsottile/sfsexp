@@ -41,7 +41,7 @@
 
 /**
  * Given an s-expression, find the atom inside of it with the
- * value matchine name, and return a reference to it.  If the atom
+ * value matching name, and return a reference to it.  If the atom
  * doesn't occur inside start, return NULL.
  */
 sexp_t *

@@ -44,12 +44,12 @@ LA-CC-04-094
 VALUE cSexp;
 
 /*
- * enumeration and inferrence routine used to guess what the strings
+ * enumeration and inference routine used to guess what the strings
  * represent in detail regarding string vs int vs float.
  */ 
 typedef enum { SVAL_STRING, SVAL_INTEGER, SVAL_REAL, SVAL_NONE } sval_type;
 
-/* inferrence routine - about the umpteenth version of this code.  never
+/* inference routine - about the umpteenth version of this code.  never
  * can remember where it was written the LAST time I wrote it...
  */
 static sval_type infer_sval_type(sexp_t *sx) {
@@ -88,7 +88,7 @@ static sval_type infer_sval_type(sexp_t *sx) {
            number */
         ishex = 2;
       else
-        /* string starting with 0x and a non-hex caracter -- must be
+        /* string starting with 0x and a non-hex character -- must be
          * a string.
          */
         return SVAL_STRING; 
@@ -417,7 +417,7 @@ static VALUE sexp_getStr(VALUE self) {
   return rb_iv_get(self, "@str");
 }
 
-/* call made by ruby when loading the dynamlic library of this code.
+/* call made by ruby when loading the dynamic library of this code.
  * defines the Sexp class and the methods on it.  They are implemented
  * above.
  */

@@ -90,9 +90,9 @@ extern "C" {
 
   /**
    * Breadth first search for s-expressions.  Depth first search will find
-   * the first occurance of a string in an s-expression by basically finding
-   * the earliest occurance in the string representation of the expression
-   * itself.  Breadth first search will find the first occurance of a string
+   * the first occurrence of a string in an s-expression by basically finding
+   * the earliest occurrence in the string representation of the expression
+   * itself.  Breadth first search will find the first occurrence of a string
    * in relation to the structure of the expression itself (IE: the instance
    * with the lowest depth will be found).
    *

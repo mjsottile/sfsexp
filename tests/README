@@ -19,7 +19,7 @@ similar test to readtests, but instead of doing a
 parse->unparse->parse->unparse loop and comparing output, it simply does
 a parse->unparse and print of each expression so one can compare the originals
 on disk and the version that is printed to see if they match.  Try it on
-your ~/.emacs file -- suprisingly enough, my .emacs revealed a couple of 
+your ~/.emacs file -- surprisingly enough, my .emacs revealed a couple of 
 bugs that were otherwise not showing up!  Finally, ctest is a tester that
 takes a fixed s-expression string and parses it with different size chunks
 passed into the continuation-based parser.  This allows us to test that the
@@ -84,7 +84,7 @@ To use vis_test.c :
 -------------------
 
 Add any desired s-expressions to the file 'test_expressions'. Run
-vis_test; if all s-expressions are sucessfully transformed to DOT, it
+vis_test; if all s-expressions are successfully transformed to DOT, it
 will exit 0. DOT output can be examined in out${n}.dot where is the
 index (from 0) of the s-expression in 'test_expressions'. The optional
 first argument defines a number of seconds to allow the program to run
