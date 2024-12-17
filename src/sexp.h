@@ -62,7 +62,7 @@
  * This library was created to provide s-expression parsing and manipulation
  * facilities to C and C++ programs.  The primary goals were speed and
  * efficiency - low memory impact, and the highest speed we could achieve in
- * parsing.  Suprisingly, no other libraries on the net were found that were
+ * parsing.  Surprisingly, no other libraries on the net were found that were
  * not bloated with features or involved embedding a full-fledged LISP or
  * Scheme interpreter into our programs.  So, this library evolved to fill
  * this gap.  As such, it does not guarantee that every valid LISP
@@ -228,7 +228,7 @@ typedef struct elt {
   /**
    * The element has a type that determines how the structure is used.
    * If the type is <B>SEXP_VALUE</B>, then a programmer knows that
-   * either the val field or bindata field is meaningful dependin on
+   * either the val field or bindata field is meaningful depending on
    * the value of the aty field, and contains the data associated with
    * this element of the s-expression.  If the type is
    * <B>SEXP_LIST</B>, then the list field contains a pointer to the
@@ -470,7 +470,7 @@ typedef struct pcont {
   unsigned int esc;
 
   /**
-   * Flag whether or not we are processing an atom that was preceeded by
+   * Flag whether or not we are processing an atom that was preceded by
    * a single quote.
    */
   unsigned int squoted;
@@ -596,7 +596,7 @@ extern "C" {
    * by when space is exhausted.  A safe choice for parameter sizes would
    * be on the order of the average size for \a ss, and one standard
    * deviation for \a gs.  This ensures that 50% of all expressions are
-   * guaranteed to fit in the initial buffer, and rougly 80-90% will fit in
+   * guaranteed to fit in the initial buffer, and roughly 80-90% will fit in
    * one growth.  If memory is not an issue, choosing ss to be the mean plus
    * one standard deviation will capture 80-90% of expressions in the initial
    * buffer, and a gs of one standard deviation will capture nearly all
@@ -718,7 +718,7 @@ extern "C" {
    * given and IO wrapper handle, read one s-expression
    * off of it.  this expression may be contained in a continuation,
    * so there is no guarantee that under the covers an IO read
-   * actually is occuring.  A return value of NULL can either indicate
+   * actually is occurring.  A return value of NULL can either indicate
    * a parser error or no more data on the input IO handle.  In the
    * event that NULL is returned, the user should check to see if
    * sexp_errno contains SEXP_ERR_IO_EMPTY (no more data) or a more
